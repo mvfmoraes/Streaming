@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('customer')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(customer => Sucesso(customer))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { customer_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('customer')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ customer_id })
+                .then(customer => Sucesso(customer))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,22 +32,38 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
+            store_id,
             first_name,
-            last_name
+            last_name,
+            email,
+            address_id,
+            active,
+            create_date
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('customer')
                 .insert({
+                    store_id,
                     first_name,
                     last_name,
+                    email,
+                    address_id,
+                    active,
+                    create_date,
                     last_update
                 })
-                .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                .then(([id]) => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                    id,
+                    store_id,
                     first_name,
                     last_name,
+                    email,
+                    address_id,
+                    active,
+                    create_date,
                     last_update
                 })}`))
                 .catch(erro => Falha(erro));

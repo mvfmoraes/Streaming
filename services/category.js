@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('category')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(category => Sucesso(category))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { category_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('category')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ category_id })
+                .then(category => Sucesso(category))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,22 +32,19 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
-            first_name,
-            last_name
+            name
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('category')
                 .insert({
-                    first_name,
-                    last_name,
+                    name,
                     last_update
                 })
                 .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
-                    first_name,
-                    last_name,
+                    name,
                     last_update
                 })}`))
                 .catch(erro => Falha(erro));

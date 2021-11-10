@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('staff')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(staff => Sucesso(staff))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { staff_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('staff')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ staff_id })
+                .then(staff => Sucesso(staff))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,23 +32,46 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
+            active,
+            address_id,
+            email,
             first_name,
-            last_name
+            last_name,
+            password,
+            picture,
+            store_id,
+            username
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('staff')
                 .insert({
+                    active,
+                    address_id,
+                    email,
                     first_name,
                     last_name,
+                    password,
+                    picture,
+                    store_id,
+                    username,
                     last_update
                 })
-                .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                .then(([id]) => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                    id,
+                    active,
+                    address_id,
+                    email,
                     first_name,
                     last_name,
+                    password,
+                    picture,
+                    store_id,
+                    username,
                     last_update
+                })
                 })}`))
                 .catch(erro => Falha(erro));
 

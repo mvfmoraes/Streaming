@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('film_text')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(film_text => Sucesso(film_text))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { film_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('film_text')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ film_id })
+                .then(film_text => Sucesso(film_text))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,23 +32,18 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
-            first_name,
-            last_name
+                
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('film_text')
                 .insert({
-                    first_name,
-                    last_name,
-                    last_update
+                   
                 })
-                .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
-                    first_name,
-                    last_name,
-                    last_update
+                .then(([id]) => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                    
                 })}`))
                 .catch(erro => Falha(erro));
 

@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('store')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(store => Sucesso(store))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { store_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('store')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ store_id })
+                .then(store => Sucesso(store))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,23 +32,25 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
-            first_name,
-            last_name
+            address_id,
+            manager_staff_id
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('store')
                 .insert({
-                    first_name,
-                    last_name,
+                    address_id,
+                    manager_staff_id,
                     last_update
                 })
-                .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
-                    first_name,
-                    last_name,
+                .then(([id]) => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                    id,
+                    address_id,
+                    manager_staff_id,
                     last_update
+                })
                 })}`))
                 .catch(erro => Falha(erro));
 

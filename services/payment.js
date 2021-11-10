@@ -4,9 +4,9 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('payment')
                 .select()
-                .then(actors => Sucesso(actors))
+                .then(payment => Sucesso(payment))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { payment_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('payment')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ payment_id })
+                .then(payment => Sucesso(payment))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,22 +32,32 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
-            first_name,
-            last_name
+            amount,
+            customer_id,
+            payment_date,
+            rental_id,
+            staff_id
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('payment')
                 .insert({
-                    first_name,
-                    last_name,
+                    amount,
+                    customer_id,
+                    payment_date,
+                    rental_id,
+                    staff_id,
                     last_update
                 })
-                .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
-                    first_name,
-                    last_name,
+                .then(([id]) => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
+                    id,
+                    amount,
+                    customer_id,
+                    payment_date,
+                    rental_id,
+                    staff_id,
                     last_update
                 })}`))
                 .catch(erro => Falha(erro));

@@ -4,7 +4,7 @@ module.exports = app => {
 
     const getAll = async (req, res) => {
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('address')
                 .select()
                 .then(actors => Sucesso(actors))
                 .catch(erro => Falha(erro));
@@ -16,12 +16,12 @@ module.exports = app => {
     }
 
     const get = async (req, res) => {
-        const { actor_id } = req.params;
+        const { address_id } = req.params;
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('address')
                 .select()
-                .where({ actor_id })
-                .then(actors => Sucesso(actors))
+                .where({ address_id })
+                .then(address => Sucesso(address))
                 .catch(erro => Falha(erro));
 
             return res.status(200).send({ status: true, data: Finalizar(resposta) });
@@ -32,22 +32,37 @@ module.exports = app => {
 
     const put = async (req, res) => {
         const {
-            first_name,
-            last_name
+            address,
+            address2,
+            district,
+            city_id,
+            postal_code,
+            phone,
+            location
         } = req.body;
 
         const last_update = new Date().toFormat();
 
         try {
-            const resposta = await app.db('actor')
+            const resposta = await app.db('address')
                 .insert({
-                    first_name,
-                    last_name,
+                    address,
+                    address2,
+                    district,
+                    city_id,
+                    postal_code,
+                    phone,
+                    location,
                     last_update
                 })
                 .then(() => Sucesso(`Registro inserido com sucesso:\n${JSON.stringify({
-                    first_name,
-                    last_name,
+                    address,
+                    address2,
+                    district,
+                    city_id,
+                    postal_code,
+                    phone,
+                    location,
                     last_update
                 })}`))
                 .catch(erro => Falha(erro));
